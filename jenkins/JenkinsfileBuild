@@ -1,0 +1,83 @@
+def CREDENTIALS_ID = env.GITHUB_CREDENTIALS_ID
+
+
+
+def vault_roleId = env.JENKINS_DIGITAL_PYMTSRV_ROLE_ID_DEV
+def vaultUrl = 'https://vaultdev.discoverfinancial.com:8200'
+
+
+
+def vaultProdSecrets = [
+[
+$class: 'VaultSecret', path: 'secret/cicd/nexus/accounts/global', secretValues:
+[
+[$class: 'VaultSecretValue', envVar: 'NEXUS_USERNAME', vaultKey: 'nexus2username'],
+[$class: 'VaultSecretValue', envVar: 'NEXUS_PASSWORD', vaultKey: 'nexus2password']
+]
+]
+]
+
+
+
+node('linux')
+{
+stage('Setup') {
+env.GITHUB_BRANCH = "${params.GITHUB_BRANCH}"
+env.NEXUS_PUBLIC_REPO_URL = "https://nexus2.discoverfinancial.com/repository/maven-all/";
+env.NEXUS_RELEASE_REPO_URL = "https://nexus2.discoverfinancial.com/repository/maven-internal-build/";
+echo 'Setup completed'
+}
+
+
+
+stage ('Retrieve content from git') {
+def branch = "${params.GITHUB_BRANCH}"
+if (branch.startsWith("origin/")) {
+branch = branch.substring(branch.indexOf("/")+1)
+}
+git branch: branch, credentialsId: CREDENTIALS_ID, url: "${params.GITHUB_REPO}"
+echo "Check out completed."
+}
+
+
+
+wrap([$class: 'DFSVaultBuildWrapper', vaultSecrets: vaultProdSecrets, roleId: vault_roleId , secretId:"${params.VAULT_SECRET_ID}",
+vaultUrl: vaultUrl , exposeAuthToken:false , wrap:true]) {
+
+
+
+stage('Build/Sonar/Nexus') {
+
+stage('set gradlew permission') {
+sh 'chmod +x gradlew'
+}
+
+
+
+stage('Clean Build and Publish') {
+sh "./gradlew clean build publishMyBootJarPublicationToMavenRepository -PnexusPublicRepoURL=${NEXUS_PUBLIC_REPO_URL} -Pnexus2DevRepo=${env.NEXUS_RELEASE_REPO_URL} -Pnexus2Username=${env.NEXUS_USERNAME} -Pnexus2Password=${env.NEXUS_PASSWORD} -PbuildNumber=${env.BUILD_NUMBER} -Prelease.scope=${params.release_scope} -Dorg.gradle.internal.publish.checksums.insecure=true --info --stacktrace --refresh-dependencies"
+}
+
+
+
+// stage('nexus-lifecycle') {
+// @Library("NexusLifecycleScan") _
+// nexusLifecycleAnalysis {
+// iq_app_name="dci-ap-globalvision-web"
+// iq_scan_patterns="*"
+//iq_stage="build"
+//}
+// }
+
+
+
+// withSonarQubeEnv('SonarQube2') {
+// sh "./gradlew sonarqube -PnexusPublicRepoURL=${NEXUS_PUBLIC_REPO_URL} -Pnexus2DevRepo=${env.NEXUS_RELEASE_REPO_URL} -Pnexus2Username=${env.NEXUS_USERNAME} -Pnexus2Password=${env.NEXUS_PASSWORD} -PbuildNumber=${env.BUILD_NUMBER} --stacktrace"
+//}
+
+}
+stage('Cleanup Workspace'){
+step([$class: 'WsCleanup'])
+}
+}
+}

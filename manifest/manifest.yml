@@ -1,0 +1,9 @@
+applications:
+- name: IPSE-APP
+  memory: 1g
+  path: C:\Akash\IPSE-BATCH-APP\build\libs\IPSE-BATCH-APP-1.0.local.jar
+  #target: https://api.system.cf-ssb-z3-dev.discoverfinancial.com
+  instances: 2
+  disk_quota: 2048MB
+  buildpack: java-buildpack-openjdk-v4-35
+  stack: cflinuxfs3

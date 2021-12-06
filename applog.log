@@ -1,0 +1,26 @@
+2021-12-01 06:57:54,580 [INFO] com.batch.IpseBatchAppApplication [restartedMain] Starting IpseBatchAppApplication using Java 1.8.0_261 on VPD06816 with PID 6052 (C:\Akash\IPSE-BATCH-APP\bin\main started by apowar in C:\Akash\IPSE-BATCH-APP)
+2021-12-01 06:57:54,593 [INFO] com.batch.IpseBatchAppApplication [restartedMain] No active profile set, falling back to default profiles: default
+2021-12-01 06:57:55,432 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat initialized with port(s): 8082 (http)
+2021-12-01 06:57:55,434 [INFO] org.apache.catalina.core.StandardService [restartedMain] Starting service [Tomcat]
+2021-12-01 06:57:55,435 [INFO] org.apache.catalina.core.StandardEngine [restartedMain] Starting Servlet engine: [Apache Tomcat/9.0.44]
+2021-12-01 06:57:55,465 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [restartedMain] Initializing Spring embedded WebApplicationContext
+2021-12-01 06:57:55,465 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [restartedMain] Root WebApplicationContext: initialization completed in 865 ms
+2021-12-01 06:57:55,501 [INFO] com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-2 - Starting...
+2021-12-01 06:57:55,505 [INFO] com.zaxxer.hikari.HikariDataSource [restartedMain] HikariPool-2 - Start completed.
+2021-12-01 06:57:55,510 [INFO] org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration [restartedMain] H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2021-12-01 06:57:55,552 [INFO] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer [restartedMain] LiveReload server is running on port 35729
+2021-12-01 06:57:55,871 [INFO] org.springframework.batch.core.repository.support.JobRepositoryFactoryBean [restartedMain] No database type set, using meta data indicating: H2
+2021-12-01 06:57:55,872 [INFO] org.springframework.batch.core.launch.support.SimpleJobLauncher [restartedMain] No TaskExecutor has been set, defaulting to synchronous executor.
+2021-12-01 06:57:55,902 [INFO] org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler [restartedMain] Initializing ExecutorService 'taskScheduler'
+2021-12-01 06:57:55,944 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [restartedMain] Tomcat started on port(s): 8082 (http) with context path ''
+2021-12-01 06:57:55,956 [INFO] com.batch.IpseBatchAppApplication [restartedMain] Started IpseBatchAppApplication in 1.511 seconds (JVM running for 395.251)
+2021-12-01 06:57:55,957 [INFO] org.springframework.boot.autoconfigure.batch.JobLauncherApplicationRunner [restartedMain] Running default command line with: [inputResource=C:/Akash/demo.txt]
+2021-12-01 06:57:55,968 [INFO] org.springframework.batch.core.launch.support.SimpleJobLauncher [restartedMain] Job: [SimpleJob: [name=readCSVFileJob]] launched with the following parameters: [{run.id=1, inputResource=C:/Akash/demo.txt}]
+2021-12-01 06:57:55,987 [INFO] org.springframework.batch.core.job.SimpleStepHandler [restartedMain] Executing step: [step]
+2021-12-01 06:58:02,519 [INFO] org.springframework.batch.core.step.AbstractStep [restartedMain] Step: [step] executed in 6s531ms
+2021-12-01 06:58:02,523 [INFO] org.springframework.batch.core.launch.support.SimpleJobLauncher [restartedMain] Job: [SimpleJob: [name=readCSVFileJob]] completed with the following parameters: [{run.id=1, inputResource=C:/Akash/demo.txt}] and the following status: [COMPLETED] in 6s552ms
+2021-12-01 06:58:02,527 [INFO] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener [restartedMain] Condition evaluation unchanged
+2021-12-01 06:58:45,003 [WARN] org.springframework.beans.factory.support.DisposableBeanAdapter [Thread-10] Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-200]
+2021-12-01 06:58:45,007 [INFO] org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler [Thread-10] Shutting down ExecutorService 'taskScheduler'
+2021-12-01 06:58:45,010 [INFO] com.zaxxer.hikari.HikariDataSource [Thread-10] HikariPool-2 - Shutdown initiated...
+2021-12-01 06:58:45,016 [INFO] com.zaxxer.hikari.HikariDataSource [Thread-10] HikariPool-2 - Shutdown completed.

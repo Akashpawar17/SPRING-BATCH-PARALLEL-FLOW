@@ -1,0 +1,105 @@
+buildscript {
+    ext {
+        appVersion = '2.0'
+        cloudVersion = '1.2.2.RELEASE'
+    }
+    repositories {
+        mavenLocal()
+        maven { url nexusPublicRepoURL }
+    }
+    dependencies {
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.3'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.4.4")
+        classpath("io.spring.dependency-management:io.spring.dependency-management.gradle.plugin:1.0.11.RELEASE")
+        //classpath ("com.netflix.nebula:nebula-release-plugin:13.0.0") //added for testing only
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'cloudfoundry'
+apply plugin: 'war'
+
+
+project.group = 'com.batch'
+project.version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+def buildVersion = getVersion()
+project.version = buildVersion
+
+jar {
+    enabled = true
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+    maven { url nexusPublicRepoURL }
+}
+dependencies {
+   
+    
+    compile 'org.springframework.security:spring-security-core:5.4.6'
+    compile ('org.springframework.security:spring-security-web:5.4.6')
+    compile 'com.nimbusds:oauth2-oidc-sdk:9.3.3'
+    
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok:1.18.18'
+	compile group: 'org.springframework', name: 'spring-tx', version: '5.2.1.RELEASE'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok:1.18.18'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.batch:spring-batch-test'
+	
+	//Cloud
+	compile("org.springframework.cloud:spring-cloud-core:$cloudVersion")
+	compile("org.springframework.cloud:spring-cloud-cloudfoundry-connector:$cloudVersion")
+	compile("org.springframework.cloud:spring-cloud-spring-service-connector:$cloudVersion")  {
+		exclude group: "commons-logging", module: "commons-logging"
+	}
+		
+	
+}
+
+test {
+	useJUnitPlatform()
+}
+
+def getVersion() {
+    return "${appVersion}.$buildNumber"
+}
+
+publishing {
+    publications {
+        myBootJar(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+           // artifact bootJar
+             artifact("C:/Akash/IPSE-BATCH-APP/build/libs/IPSE-BATCH-APP-${appVersion}.$buildNumber"+".war") {
+                extension 'war'
+            }
+        }
+    }
+   
+    repositories {
+        maven {
+            url = nexusReleaseRepoURL
+            credentials {
+                username  nexus2Username
+                password  nexus2Password
+            }
+        }
+    }
+}
